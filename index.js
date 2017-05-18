@@ -5,6 +5,7 @@ import StartAudioContext from 'startaudiocontext'
 
 const context = createContext()
 const canvas = context.canvas
+document.body.appendChild(canvas)
 
 const app = createLoop(canvas, {
   scale: window.devicePixelRatio
@@ -18,9 +19,14 @@ const tonalities = [
     color: 'tomato'
   },
   {
-    notes: ['G3', 'G4', 'E5'],
+    notes: ['G3', 'G4', 'D5'],
     color: 'turquoise'
+  },
+  {
+    notes: ['E3', 'E4', 'B5'],
+    color: 'violet'
   }
+
 ]
 
 let time = 0
@@ -38,28 +44,51 @@ let thing = {
   y: 0,
   color: tonalities[0].color
 }
+let masterVol
 let filter
 let dist
+let comp
+let vibrato
 let poly
 
 function selectTone () {
   return tonalities[Math.floor(Math.random() * tonalities.length)]
 }
 
+function initSynth () {
+  masterVol = new Tone.Volume(-12)
+  filter = new Tone.Filter()
+  dist = new Tone.Distortion(1)
+  comp = new Tone.Compressor(-30, 8)
+  vibrato = new Tone.Vibrato({
+    frequency: 2,
+    depth: 0
+  })
+  
+  poly = new Tone.PolySynth(3, Tone.Synth)
+    .set({
+      envelope: {
+        attack: 0.5,
+        sustain: 1,
+        release: 0.1
+      }
+    })
+    .chain(dist, filter, comp, vibrato, masterVol, Tone.Master)
+    .triggerAttack(tonalities[0].notes, 0, 0.1)
+
+  Tone.Transport.start()
+  Tone.Transport.scheduleRepeat(function(time){
+    const tonality = selectTone()
+    poly.releaseAll()
+    poly.triggerAttack(tonality.notes, time, 0.1)
+    thing.color = tonality.color
+  }, '1m', '1m')
+}
+
 StartAudioContext(Tone.context, '#start-button')
   .then(function(){
-    document.body.appendChild(canvas)
-    filter = new Tone.Filter()
-    dist = new Tone.Distortion(1)
-    poly = new Tone.PolySynth(3, Tone.Synth)
-      .chain(dist, filter, Tone.Master)
-      .triggerAttack(tonalities[0].notes, 0, 0.8)
-    Tone.Transport.start()
-    Tone.Transport.scheduleRepeat(function(time){
-      const tonality = selectTone()
-    	poly.releaseAll().triggerAttack(tonality.notes, time, 0.8)
-      thing.color = tonality.color
-    }, '1m', '1m')
+    document.body.classList.add('started')
+    initSynth()
     app.start()
   })
 
@@ -73,7 +102,7 @@ app.on('tick', (dt) => {
   time += dt / 1000
 
   // visual
-  context.fillStyle = `rgba(0,0,0,${0.1})`
+  context.fillStyle = `rgba(0,0,0,${0.05})`
   context.scale(app.scale, app.scale)
   context.fillRect(0, 0, w, h)
   context.fillStyle = thing.color
@@ -86,6 +115,7 @@ app.on('tick', (dt) => {
   const baseFreq = 5000
   filter.frequency.value = Math.abs(thing.x * 2) * baseFreq
   dist.wet.value = Math.abs(thing.y * 2)
+  vibrato.depth.value = Math.abs(thing.y)
 })
 
 function addEventListeners () {

@@ -10,7 +10,35 @@
     <script src="bundle.js" charset="utf-8"></script>
     <style media="screen">
       body {
+        margin: 0;
+        padding: 0;
         background: #212121;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+      }
+      button {
+        background: transparent;
+        position: relative;
+        color: white;
+        border: 1px solid currentColor;
+        text-transform: uppercase;
+        padding: 1rem 2rem;
+        letter-spacing: 0.1em;
+        font-size: 1rem;
+        z-index: 1;
+        transition: opacity 1s ease;
+      }
+      button:hover,
+      button:focus {
+        color: black;
+        background: white;
+      }
+      .started button {
+        opacity: 0;
       }
     </style>
   </body>
