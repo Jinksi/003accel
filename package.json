@@ -8,7 +8,9 @@
     "2d-context": "^1.3.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
-    "canvas-loop": "^1.0.7"
+    "canvas-loop": "^1.0.7",
+    "startaudiocontext": "^1.2.1",
+    "tone": "^0.10.0"
   },
   "scripts": {
     "start": "budo index.js:bundle.js --live -- -t [ babelify --presets [ es2015 ] ]"

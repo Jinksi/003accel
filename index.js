@@ -1,5 +1,7 @@
 import createLoop from 'canvas-loop'
 import createContext from '2d-context'
+import Tone from 'tone'
+import StartAudioContext from 'startaudiocontext'
 
 const context = createContext()
 const canvas = context.canvas
@@ -7,10 +9,8 @@ const canvas = context.canvas
 const app = createLoop(canvas, {
   scale: window.devicePixelRatio
 })
-document.body.appendChild(canvas)
 
 addEventListeners()
-app.start()
 
 let time = 0
 let opacity = 1
@@ -27,6 +27,21 @@ let thing = {
   x: 0,
   y: 0
 }
+let filter
+let dist
+let poly
+
+StartAudioContext(Tone.context, '#start-button')
+  .then(function(){
+    document.body.appendChild(canvas)
+    filter = new Tone.Filter()
+    dist = new Tone.Distortion(1)
+    poly = new Tone.PolySynth(3, Tone.Synth)
+      .chain(dist, filter, Tone.Master)
+      .triggerAttack(["C3", "C4", "G5"], undefined, 0.8);
+    app.start()
+  })
+
 
 app.on('tick', (dt) => {
   const [ w, h ] = app.shape
@@ -35,7 +50,8 @@ app.on('tick', (dt) => {
   thing.x += (desired.x - thing.x) * ease
   thing.y += (desired.y - thing.y) * ease
   time += dt / 1000
-  // context.clearRect(0, 0, w, h)
+
+  // visual
   context.fillStyle = `rgba(0,0,0,${0.1})`
   context.scale(app.scale, app.scale)
   context.fillRect(0, 0, w, h)
@@ -44,6 +60,11 @@ app.on('tick', (dt) => {
   context.scale(thing.x * 2, thing.y * 2)
   context.fillRect(0, 0, w, h)
   context.resetTransform()
+
+  // audio
+  const baseFreq = 5000
+  filter.frequency.value = Math.abs(thing.x * 2) * baseFreq
+  dist.wet.value = Math.abs(thing.y * 2)
 })
 
 function addEventListeners () {
