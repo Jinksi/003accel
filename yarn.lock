@@ -667,6 +667,12 @@ combine-source-map@~0.7.1:
     lodash.memoize "~3.0.3"
     source-map "~0.5.3"
 
+commander@~2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
+  dependencies:
+    graceful-readlink ">= 1.0.0"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -868,6 +874,10 @@ glob@^7.1.0:
 globals@^9.0.0:
   version "9.17.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.17.0.tgz#0c0ca696d9b9bb694d2e5470bd37777caad50286"
+
+"graceful-readlink@>= 1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
 has-ansi@^2.0.0:
   version "2.0.0"
@@ -1358,7 +1368,7 @@ source-map-support@^0.4.2:
   dependencies:
     source-map "^0.5.6"
 
-source-map@^0.5.0, source-map@^0.5.6, source-map@~0.5.3:
+source-map@^0.5.0, source-map@^0.5.6, source-map@~0.5.1, source-map@~0.5.3:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
@@ -1469,6 +1479,13 @@ tty-browserify@~0.0.0:
 typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+uglify-js@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.0.8.tgz#9478c47c7a18ca1ef3382b7a18c848c6d3b888a2"
+  dependencies:
+    commander "~2.9.0"
+    source-map "~0.5.1"
 
 umd@^3.0.0:
   version "3.0.1"

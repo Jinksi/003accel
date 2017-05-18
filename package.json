@@ -13,9 +13,14 @@
     "tone": "^0.10.0"
   },
   "scripts": {
-    "start": "budo index.js:bundle.js --live -- -t [ babelify --presets [ es2015 ] ]"
+    "start": "budo index.js:bundle.js --live -- -t [ babelify --presets [ es2015 ] ]",
+    "js": "browserify index.js -t [ babelify --presets [ es2015 ] ] -o bundle.js",
+    "js-min": "uglifyjs bundle.js -c -m -o bundle.js",
+    "build": "npm run js && npm run js-min && npm run dist",
+    "dist": "rm -rf build && mkdir build && cp index.* build/. && mv bundle.js build/."
   },
   "devDependencies": {
-    "browserify": "^14.3.0"
+    "browserify": "^14.3.0",
+    "uglify-js": "^3.0.8"
   }
 }
